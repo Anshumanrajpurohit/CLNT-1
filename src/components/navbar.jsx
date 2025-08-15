@@ -1,65 +1,80 @@
-import { useState, useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import '../style/navbar.css';
 
 const Navbar = () => {
-  const [isScrolled, setIsScrolled] = useState(false);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const location = useLocation();
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) setIsMenuOpen(false);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const navItems = [
-    { label: "Home", href: "/" },
-    { label: "About", href: "/about" },
-    { label: "Services", href: "/service" },
+  const links = [
+    { to: '/', label: 'Home' },
+    { to: '/about', label: 'About' },
+    { to: '/service', label: 'Services' }
   ];
 
   return (
-    <nav className={`navbar ${isScrolled ? "scrolled" : ""}`}>
+    <nav className="navbar">
       <div className="navbar-container">
-        {/* Logo */}
-        <div className="navbar-logo">LOGO</div>
+        <Link to="/" className="navbar-logo">
+          Book My Mehndi
+        </Link>
 
-        {/* Desktop Navigation */}
-        <div className="navbar-links">
-          {navItems.map((item) => (
-            <a key={item.label} href={item.href} className="nav-link">
-              {item.label}
-            </a>
-          ))}
-        </div>
+        {!isMobile && (
+          <div className="navbar-menu">
+            {links.map(({ to, label }) => (
+              <Link
+                key={to}
+                to={to}
+                className={`navbar-link${location.pathname === to ? ' active' : ''}`}
+              >
+                {label}
+              </Link>
+            ))}
+            <button className="navbar-book-btn">Book Now</button>
+          </div>
+        )}
 
-        {/* CTA Button */}
-        <div className="navbar-cta">
-          <button className="cta-button">Book Now</button>
-        </div>
-
-        {/* Mobile Menu Toggle */}
-        <div className="navbar-toggle" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
-          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-        </div>
+        {/* Mobile Menu Button */}
+        {isMobile && (
+          <button
+            className="mobile-menu-btn"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            ☰
+          </button>
+        )}
       </div>
 
-      {/* Mobile Navigation */}
-      {isMobileMenuOpen && (
+      {/* Mobile Menu */}
+      {isMobile && isMenuOpen && (
         <div className="mobile-menu">
-          {navItems.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="mobile-link"
-              onClick={() => setIsMobileMenuOpen(false)}
+          {links.map(({ to, label }) => (
+            <Link
+              key={to}
+              to={to}
+              className={`mobile-menu-link${location.pathname === to ? ' active' : ''}`}
+              onClick={() => setIsMenuOpen(false)}
             >
-              {item.label}
-            </a>
+              {label}
+            </Link>
           ))}
-          <button className="cta-button mobile-cta">Book Now</button>
+          <button
+            className="mobile-book-btn"
+            onClick={() => setIsMenuOpen(false)}
+          >
+            Book Now
+          </button>
         </div>
       )}
     </nav>
