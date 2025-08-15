@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import  '../style/navbar.css';
-import About from '../pages/about.jsx';
-import Service from '../pages/service.jsx';
+import '../style/navbar.css';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -17,9 +15,9 @@ const Navbar = () => {
   }, []);
 
   const navItems = [
-    { label: "Home", href: "#" },
-    { label: "About", href: About },
-    { label: "Services", href: Service },
+    { label: "Home", href: "/" },
+    { label: "About", href: "/about" },
+    { label: "Services", href: "/service" },
   ];
 
   return (
