@@ -8,19 +8,17 @@ import Footer from './components/footer.jsx';
 
 function App() {
   return (
-    <>
-      <Router>
-        <Navbar />
-        <div style={{ maxWidth: '1200px', marginTop: '80px', padding: '20px' }}>
+    <Router>
+      <Navbar />
+      <div style={{ marginTop: '80px' }}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/service" element={<Service />} />
         </Routes>
-        </div>
-        <Footer />
-      </Router>
-    </>
+      </div>
+      <Footer /> 
+    </Router>
   );
 }
 
